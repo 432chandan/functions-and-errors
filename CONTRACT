@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.0;
+
+contract SpeedDetection {
+    address public organizer;
+    mapping(address => bool) private isDriverAllowed;
+
+    event DriverAllowed(address indexed driver);
+    event OverspeedDetected(address indexed driver);
+
+    constructor() {
+        organizer = msg.sender;
+    }
+
+    function assessFine(uint256 speed) external pure returns (uint256 fine) {
+        // Use assert() to set the range from 20 to 120 km/h
+        assert(speed >= 10 && speed <= 140);
+
+        // Use require() to set the range from 90 to 110 km/h
+        require(speed >= 50 && speed <= 110, "Fine not applicable");
+        // Apply fine of 200
+        fine = 200;
+    }
+
+    function shouldSeizeBike(uint256 speed) external pure returns (bool seizeBike) {
+        // Use revert() to handle an exceptional case if the speed is above 110 km/h
+        if (speed > 110) {
+            revert("Speed above 110 km/h detected: Seizing the bike");
+        }
+        seizeBike = false;
+    }
+}
